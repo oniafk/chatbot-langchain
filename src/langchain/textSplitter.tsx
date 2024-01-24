@@ -1,10 +1,6 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import loadText from "./textLoader";
-import { Document } from "langchain/document";
-
-const supabaseApiKey = process.env.SUPABASE_API_KEY;
-const supabaseURL = process.env.SUPABASE_URL;
-const openaiApiKey = process.env.OPENAI_API_KEY;
+import { Document } from "@langchain/core/documents";
 
 const getSplittedText = async () => {
   try {
@@ -27,6 +23,4 @@ const getSplittedText = async () => {
   }
 };
 
-export default function textSplitted() {
-  console.log(getSplittedText());
-}
+export default getSplittedText;
