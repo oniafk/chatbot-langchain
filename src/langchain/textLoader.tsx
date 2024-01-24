@@ -7,5 +7,5 @@ const loader = new DirectoryLoader("src/lib/text-embedding/", {
 
 export default async function loadText() {
   const text = await loader.load();
-  console.log(text);
+  return { text };
 }
