@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import ChatInput from "./ChatInput";
 
 import ChatHeader from "./ChatHeader";
 
@@ -24,6 +25,7 @@ export default function CursomerServiceChatbot() {
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-col h-80"></div>
+              <ChatInput className="px-4" />
             </AccordionContent>
           </div>
         </div>
