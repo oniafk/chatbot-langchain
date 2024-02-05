@@ -7,7 +7,7 @@ import retriever from "./retriever";
 
 const openAIApiKey = process.env.OPENAI_API_KEY;
 
-async function StandaloneQuestion() {
+async function StandaloneQuestion(question: string) {
   const standaloneQuestionTemplate =
     "Given a question,  convert it to a standalone question. question: {question} standalone question :";
 
@@ -36,17 +36,10 @@ async function StandaloneQuestion() {
     .pipe(combineDocuments);
 
   const response = await chain.invoke({
-    question:
-      "Where is my product? it's been almost a month since I ordered it. and I have not received it yet.",
+    question: question,
   });
 
-  console.log(response);
-
-  return (
-    <div>
-      <h1>hello</h1>
-    </div>
-  );
+  return response;
 }
 
 export default StandaloneQuestion;
