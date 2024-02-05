@@ -1,70 +1,47 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { PromptTemplate } from "langchain/prompts";
-import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { createClient } from "@supabase/supabase-js";
+import { PromptTemplate } from "@langchain/core/prompts";
+import { StringOutputParser } from "@langchain/core/output_parsers";
+import { combineDocuments } from "./combineDocuments";
+
+import retriever from "./retriever";
 
 const openAIApiKey = process.env.OPENAI_API_KEY;
 
-const embeddings = new OpenAIEmbeddings({ openAIApiKey });
-const supabaseApiKey = process.env.SUPABASE_API_KEY;
-const supabaseURL = process.env.SUPABASE_URL;
-const client = createClient(supabaseURL!, supabaseApiKey!);
-
-// const vectorStore = new SupabaseVectorStore(embeddings, {
-//   client,
-//   tableName: "documents", //table that contains the vectors that we want to search and match information from
-//   queryName: "match_documents", //query that we want to use to search the table, this is on supabase and can be edited
-// });
-
-// const retriever = vectorStore.asRetriever(); // this is the retriever that we will use to search the table that is defined on the vectorStore const
-
-// const llm = new ChatOpenAI({ openAIApiKey });
-
-// const standaloneQuestion =
-//   "Given a question,  convert it to a standalone question. question: {question} standalone question :";
-
-// const standaloneQuestionPrompt =
-//   PromptTemplate.fromTemplate(standaloneQuestion);
-// const standaloneQuestionChain = standaloneQuestionPrompt.pipe(llm);
-
-// const response = await standaloneQuestionChain.invoke({
-//   question:
-//     "Where is my product? it's been almost a month since I ordered it. and I have not received it yet.",
-// });
-
-// const response2 = await retriever.invoke("when will my product arrive?");
-
-// console.log(response);
-// console.log(response2);
-
 async function StandaloneQuestion() {
-  const vectorStore = new SupabaseVectorStore(embeddings, {
-    client,
-    tableName: "documents", //table that contains the vectors that we want to search and match information from
-    queryName: "match_documents", //query that we want to use to search the table, this is on supabase and can be edited
-  });
-
-  const retriever = vectorStore.asRetriever(); // this is the retriever that we will use to search the table that is defined on the vectorStore const
-
-  const llm = new ChatOpenAI({ openAIApiKey });
-
-  const standaloneQuestion =
+  const standaloneQuestionTemplate =
     "Given a question,  convert it to a standalone question. question: {question} standalone question :";
 
-  const standaloneQuestionPrompt =
-    PromptTemplate.fromTemplate(standaloneQuestion);
-  const standaloneQuestionChain = standaloneQuestionPrompt.pipe(llm);
+  const answerTemplate = `
+    you are a customer service chat that are trying to help the user of out platform with their question  or requeriments.
+     You should be friendly and only answer from the context provided and never make up answer.
+     If you don't know the answer, apologise and advise the user to email help@email.com.
+     always speak in a friendly and professional manner like talking to a friend.
+     context: {context}
+     question: {question}
+     answer:
+    `;
 
-  const response = await standaloneQuestionChain.invoke({
+  const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
+
+  const llm = new ChatOpenAI({ openAIApiKey, temperature: 0.2 });
+
+  const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
+    standaloneQuestionTemplate
+  );
+
+  const chain = standaloneQuestionPrompt
+    .pipe(llm)
+    .pipe(new StringOutputParser())
+    .pipe(retriever)
+    .pipe(combineDocuments);
+
+  const response = await chain.invoke({
     question:
       "Where is my product? it's been almost a month since I ordered it. and I have not received it yet.",
   });
 
-  const response2 = await retriever.invoke("when will my product arrive?");
-
   console.log(response);
-  console.log(response2);
+
   return (
     <div>
       <h1>hello</h1>
