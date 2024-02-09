@@ -28,7 +28,8 @@
     "shadcn-ui": "latest",
     "supabase": ">=1.8.1",
     "tailwind-merge": "^2.2.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.17.20",
