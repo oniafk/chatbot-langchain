@@ -3,7 +3,9 @@
 import { FC, HTMLAttributes, useContext, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import TextareaAutosize from "react-textarea-autosize";
-import { text } from "stream/consumers";
+import { useMutation } from "@tanstack/react-query";
+import { Message } from "@/lib/schemas/message.schema";
+import { nanoid } from "nanoid";
 
 interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -13,6 +15,31 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   textAreaRef.current?.focus();
+
+  const { mutate: sendMessage, isPending } = useMutation({
+    mutationFn: async (message: Message) => {
+      const response = await fetch("/api/message", {
+        method: "POST",
+        body: JSON.stringify({ messages: [message] }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("response", response);
+      return response.body;
+    },
+
+    onSuccess: async (stream) => {
+      if (!stream) throw new Error("No response from server");
+      const id = nanoid();
+      const responseMessage: Message = {
+        id,
+        isUserMessage: false,
+        text: "",
+      };
+    },
+  });
 
   const showcustomerinput = () => {
     console.log("customerInput", customerInput);
@@ -28,8 +55,15 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
           value={customerInput}
           onChange={(e) => setCustomerInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
+
+              sendMessage({
+                id: nanoid(),
+                isUserMessage: true,
+                text: customerInput,
+              });
+
               showcustomerinput();
               setCustomerInput("");
             }

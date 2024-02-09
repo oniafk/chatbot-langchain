@@ -12,7 +12,11 @@ import retriever from "./retriever";
 const openAIApiKey = process.env.OPENAI_API_KEY;
 const llm = new ChatOpenAI({ openAIApiKey });
 
-async function CustomerServiceAnswer() {
+interface ChainSequenceProps {
+  questionInput: string;
+}
+
+async function ChainSequence({ questionInput }: ChainSequenceProps) {
   const standaloneQuestionTemplate = `Given a question,  convert it to a standalone question. question: {question} standalone question :`;
 
   const SQPrompt = PromptTemplate.fromTemplate(standaloneQuestionTemplate);
@@ -77,8 +81,7 @@ async function CustomerServiceAnswer() {
   ]);
 
   const response = await chain.invoke({
-    question:
-      "I need to know the number of my credit card that its on your website, can you help me with that?",
+    question: questionInput,
   });
 
   console.log(response);
@@ -90,4 +93,4 @@ async function CustomerServiceAnswer() {
   );
 }
 
-export default CustomerServiceAnswer;
+export default ChainSequence;
