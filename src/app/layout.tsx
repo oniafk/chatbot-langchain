@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Chatbot from "@/components/chatbot";
-import CustomerServiceAnswer from "../langchain/ChainSequence";
+
 import ContextProvider from "@/providers/contextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,7 +23,6 @@ export default function RootLayout({
         <body className={inter.className}>
           {children}
           <Chatbot />
-          <CustomerServiceAnswer />
         </body>
       </ContextProvider>
     </html>
