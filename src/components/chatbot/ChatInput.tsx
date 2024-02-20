@@ -6,11 +6,22 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useMutation } from "@tanstack/react-query";
 import { Message } from "@/lib/schemas/message.schema";
 import { nanoid } from "nanoid";
+import { MessagesContext } from "../../providers/chatContextProvider";
+import { toast } from "react-hot-toast";
+import { CornerDownLeft, Loader2 } from "lucide-react";
 
 interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {}
 
 const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
   const [customerInput, setCustomerInput] = useState<string>("");
+
+  const {
+    messages,
+    addMessage,
+    removeMessage,
+    updateMessage,
+    setIsMessageUpdating,
+  } = useContext(MessagesContext);
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -26,8 +37,11 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         },
       });
 
-      console.log("response", response);
       return response.body;
+    },
+
+    onMutate(message) {
+      addMessage(message);
     },
 
     onSuccess: async (stream) => {
@@ -38,11 +52,39 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         isUserMessage: false,
         text: "",
       };
+
+      addMessage(responseMessage);
+      setIsMessageUpdating(false);
+
+      const reader = stream.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const textValue = decoder.decode(value);
+        updateMessage(id, (prevText) => prevText + textValue);
+        console.log("ChatInput -> textValue", textValue);
+      }
+
+      setIsMessageUpdating(false);
+      setCustomerInput("");
+
+      setTimeout(() => {
+        textAreaRef.current?.focus();
+      }, 10);
+    },
+
+    onError(_, message) {
+      toast.error("Failed to send message");
+      removeMessage(messages[0].id);
+      textAreaRef.current?.focus();
     },
   });
 
   const showcustomerinput = () => {
-    console.log("customerInput", customerInput);
+    console.log("mensajes", messages);
   };
 
   return (
@@ -69,9 +111,20 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
             }
           }}
           autoFocus
+          disabled={isPending}
           placeholder="Type your message here..."
           className="peer disabled:opacity-50 pr-14 resize-none block w-full border-0 bg-zinc-100 py-1.5 px-2 text-gray-900 focus:ring-0 text-sm sm:leading-6"
         />
+
+        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+          <kbd className="inline-flex items-center rounded border bg-white border-gray-200 px-1 font-sans text-xs text-gray-400">
+            {isPending ? (
+              <Loader2 className="w-3 h-3 animate-spin" />
+            ) : (
+              <CornerDownLeft className="w-3 h-3" />
+            )}
+          </kbd>
+        </div>
 
         <div
           aria-hidden="true"
