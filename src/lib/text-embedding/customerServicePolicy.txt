@@ -35,7 +35,7 @@ Look for a delivery confirmation in Your Orders.
 Check your mailbox or wherever else you receive mail.
 3 - Check around the delivery location
 Check your delivery instructions in Your Addresses. The package could have been left where you requested.
-4 - Ask your household members and neighbors
+4 - Ask your household members and neighbors`
 Check if someone else accepted the delivery.
 5 - Wait 48 hours for the package to be delivered
 Packages may be mistakenly scanned as delivered up to 48 hours before arrival.
@@ -51,7 +51,7 @@ Select Track Package.
 Find your carrier name and tracking ID.
 2 - When to contact a carrier
 If you cannot find a package that shows as delivered in Your Orders.
-If your package will be delivered by another carrier than Amazon and you need to provide delivery instructions. Only Amazon can view the delivery instructions in Your Orders.
+If your package will be delivered by another carrier than us and you need to provide delivery instructions. Only we can view the delivery instructions in Your Orders.
 3 - Tracking your package on the carrier’s website
 Some national carriers use regional carriers to deliver your package. When this happens, your tracking information might not be accurate on the national carrier website.
 
@@ -85,7 +85,7 @@ Your progress tracker contains the most updated information about your order. If
 
 Check your inbox for updates:
 
-You may have received an update from Amazon or the carrier delivering your package. Don’t forget to check your spam folder.
+You may have received an update from us or the carrier delivering your package. Don’t forget to check your spam folder.
 Confirm your shipping address
 Are your address details up to date? Confirm this in Your Addresses.
 Find more information on Add and Manage Addresses.
@@ -93,22 +93,22 @@ Wait 48 hours to allow for unexpected delays
 If your order didn’t arrive, you can check with the carrier. The carrier may have more information.
 What to do after 48 hours
 If you cannot locate your package with this guidance, we recommend the following:
-Contact Customer Service within 30 days of expected delivery if your order was shipped by Amazon.
+Contact Customer Service within 30 days of expected delivery if your order was shipped by us.
 
 How Refunds Are Issued:
 Most refunds are issued based on the payment method used at the time of purchase.
 Checking the Status of Your Refund
 You can check the status of your refund by:
 Checking Your Orders
-Checking your Transactions page to review your payments and refunds with Amazon
+Checking your Transactions page to review your payments and refunds with us
 Checking your Gift Card balance page, for refunds issued as Gift Card balance
-Banks can take 2-10 business days to settle your refund after Amazon processes. Please reach out to them directly for those cases.
+Banks can take 2-10 business days to settle your refund after its processes. Please reach out to them directly for those cases.
 Refund Timelines
 It may take 1-5 business days after we receive the item(s) to process your return. Once we have, we'll email you to let you know that we have processed your return. If we haven't let you know, we haven't received or processed your return yet.
-AmazonGlobal items can take up to 5-7 days to reach us once you ship them. The amount will be refunded in AUD, and is according to the conversion rate at the time the refund was issued.
+global store items can take up to 5-7 days to reach us once you ship them. The amount will be refunded in AUD, and is according to the conversion rate at the time the refund was issued.
 
 About Our Returns Policies
-Use this page to learn more about the change of mind return policy that applies to items fulfilled by Amazon AU and AmazonGlobal. To learn more about change of mind returns for items sold and fulfilled by third-party sellers please see Third-Party Seller Returns & Refunds. To learn more about change of mind returns for Amazon Global Store, please see Amazon Global Store Returns and Global Store Refunds policies. Our return policies do not limit other rights and remedies you may have under law such as the Australian Consumer Law, including in respect of faulty items.
+Use this page to learn more about the change of mind return policy that applies to items fulfilled by our store in Australia and global store. To learn more about change of mind returns for items sold and fulfilled by third-party sellers please see Third-Party Seller Returns & Refunds. To learn more about change of mind returns for our global store, please see our Global Store Returns and Global Store Refunds policies. Our return policies do not limit other rights and remedies you may have under law such as the Australian Consumer Law, including in respect of faulty items.
 
 1. Conditions applying to change of mind returns        
 Unless otherwise stated in this Change of Mind Return Policy, all items being returned for change of mind must be returned in the same condition in which you received the item. This means that, for change of mind returns:
@@ -157,7 +157,7 @@ Click View Order Details next to the order.
 Note: The refund status is displayed at the bottom of the Order Summary. For more information about our refund policies, go to our help page about Refunds.
 
 Faulty Items and Australian Consumer Law
-If an item purchased from Amazon AU is faulty, any related return and refund rights we offer you will apply in addition to, and do not limit, other rights and remedies you may have under law, including under the Australian Consumer Law.
+If an item purchased from us in Australia is faulty, any related return and refund rights we offer you will apply in addition to, and do not limit, other rights and remedies you may have under law, including under the Australian Consumer Law.
 If you identify a faulty item:
 
 within the relevant return window for that item, you can return the item to us using the Online Returns Centre; or
