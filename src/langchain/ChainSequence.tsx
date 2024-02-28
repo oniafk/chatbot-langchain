@@ -110,13 +110,11 @@ async function ChainSequence({ questionInput }: ChainSequenceProps) {
     question: questionInput,
   });
 
-  console.log(response);
+  let formattedResponse = response.answer.replace('"', "");
 
-  return (
-    <div>
-      <h1>Customer Service Answer</h1>
-    </div>
-  );
+  console.log(response.answer);
+
+  return formattedResponse;
 }
 
 export default ChainSequence;

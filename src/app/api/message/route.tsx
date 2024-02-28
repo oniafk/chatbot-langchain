@@ -9,10 +9,14 @@ export async function POST(req: Request) {
   const lastMessage = parsedMessages[parsedMessages.length - 1];
 
   const response = await ChainSequence({ questionInput: lastMessage.text });
+  console.log(response);
 
-  return new Response(JSON.stringify(response), {
+  let formattedResponse = response.replace(/"/g, "");
+
+  console.log(messages);
+  return new Response(formattedResponse, {
     headers: {
-      "content-type": "application/json",
+      "content-type": "text/plain",
     },
   });
 }
