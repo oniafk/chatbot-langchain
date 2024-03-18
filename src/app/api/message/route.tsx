@@ -1,4 +1,3 @@
-import ChainSequence from "@/langchain/ChainSequence";
 import { MessageArraySchema } from "@/lib/schemas/message.schema";
 
 export async function POST(req: Request) {
@@ -8,15 +7,24 @@ export async function POST(req: Request) {
 
   const lastMessage = parsedMessages[parsedMessages.length - 1];
 
-  const response = await ChainSequence({ questionInput: lastMessage.text });
-  console.log(response);
+  // Enviar la solicitud POST a la URL deseada en el servidor local
+  const url = "http://localhost:3000/chatbot"; // Reemplaza con la URL correcta
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ lastMessage }), // Puedes enviar los datos en el cuerpo de la solicitud
+  };
 
-  let formattedResponse = response.replace(/"/g, "");
+  const serverResponse = await fetch(url, requestOptions);
+  const serverResponseText = await serverResponse.text();
 
-  console.log(messages);
-  return new Response(formattedResponse, {
+  const llmResponse = new Response(serverResponseText, {
     headers: {
       "content-type": "text/plain",
     },
   });
+
+  return llmResponse;
 }
