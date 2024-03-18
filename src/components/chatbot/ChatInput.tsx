@@ -1,6 +1,13 @@
 "use client";
 
-import { FC, HTMLAttributes, useContext, useState, useRef } from "react";
+import {
+  FC,
+  HTMLAttributes,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from "react";
 import { cn } from "@/lib/utils";
 import TextareaAutosize from "react-textarea-autosize";
 import { useMutation } from "@tanstack/react-query";
@@ -37,7 +44,9 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         },
       });
 
-      return response.body;
+      let llmResponse = response.body;
+
+      return llmResponse;
     },
 
     onMutate(message) {
@@ -54,6 +63,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
       };
 
       addMessage(responseMessage);
+
       setIsMessageUpdating(false);
 
       const reader = stream.getReader();
@@ -63,9 +73,16 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
-        const textValue = decoder.decode(value);
+        let textValue = decoder.decode(value);
+
+        if (
+          typeof textValue === "string" &&
+          textValue.startsWith('"') &&
+          textValue.endsWith('"')
+        ) {
+          textValue = textValue.slice(1, -1);
+        }
         updateMessage(id, (prevText) => prevText + textValue);
-        console.log("ChatInput -> textValue", textValue);
       }
 
       setIsMessageUpdating(false);
@@ -83,9 +100,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
     },
   });
 
-  const showcustomerinput = () => {
-    console.log("mensajes", messages);
-  };
+  const showcustomerinput = () => {};
 
   return (
     <div {...props} className={cn("border-t border-zinc-300", className)}>
