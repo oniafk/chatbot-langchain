@@ -128,8 +128,6 @@ async function ChainSequence({ questionInput }: ChainSequenceProps) {
 
   let formattedResponse = response.answer.replace('"', "");
 
-  console.log(response.answer);
-
   return formattedResponse;
 }
 
