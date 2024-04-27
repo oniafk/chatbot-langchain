@@ -36,12 +36,6 @@ const UserInterfaceMenu = () => {
                 >
                   Payment methods
                 </a>
-                <a
-                  href=""
-                  className="hover:bg-gray-300 rounded-md  w-full h-auto px-3 py-2"
-                >
-                  Addresses
-                </a>
               </aside>
               <Separator orientation="vertical" className="bg-slate-900 " />
               <div className=" text-gray-900 h-full grid p-2 ">
