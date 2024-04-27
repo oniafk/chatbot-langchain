@@ -1,6 +1,8 @@
+"use client";
 import * as React from "react";
 
 import { cn } from "../../lib/utils";
+import { EyeOpenIcon, EyeClosedIcon } from "@radix-ui/react-icons";
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -58,7 +60,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b transition-colors hover:bg-slate-100/50 data-[state=selected]:bg-slate-100 dark:hover:bg-slate-800/50 dark:data-[state=selected]:bg-slate-800",
+      "border-b border-slate-400 transition-colors hover:bg-slate-100/50 data-[state=selected]:bg-slate-100 dark:hover:bg-slate-800/50 dark:data-[state=selected]:bg-slate-800",
       className
     )}
     {...props}
@@ -96,6 +98,32 @@ const TableCell = React.forwardRef<
 ));
 TableCell.displayName = "TableCell";
 
+const PasswordCell = React.forwardRef<
+  HTMLTableCellElement,
+  React.TdHTMLAttributes<HTMLTableCellElement> & { value: string }
+>(({ className, value, ...props }, ref) => {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  return (
+    <td
+      ref={ref}
+      className={cn(
+        "p-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        className
+      )}
+      {...props}
+    >
+      <div className="flex gap-3 items-center ">
+        <span>{showPassword ? value : "••••••••"}</span>
+        <button onClick={() => setShowPassword(!showPassword)}>
+          {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
+        </button>
+      </div>
+    </td>
+  );
+});
+PasswordCell.displayName = "PasswordCell";
+
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>
@@ -117,4 +145,5 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  PasswordCell,
 };
