@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { ShowUserInfo } from "./UserInfoView";
 
 const UserInterfaceMenu = () => {
   return (
@@ -44,8 +44,8 @@ const UserInterfaceMenu = () => {
                 </a>
               </aside>
               <Separator orientation="vertical" className="bg-slate-900 " />
-              <div className=" text-gray-900 h-full grid p-2">
-                Section menus
+              <div className=" text-gray-900 h-full grid p-2 ">
+                <ShowUserInfo />
               </div>
             </section>
           </div>
