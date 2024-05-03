@@ -1,5 +1,7 @@
 export async function getPaymentMethods() {
-  const response = await fetch("http://localhost:3001/payment-methods");
+  const response = await fetch(
+    "https://chatbot-langchain-backend.onrender.com/payment-methods"
+  );
   const userInfo = await response.json();
   return userInfo;
 }

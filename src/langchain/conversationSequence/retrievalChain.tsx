@@ -77,7 +77,7 @@ type ConversationalRetrievalQAChainInput = {
 
 export async function customerAssistantResponse(humanMessage: string) {
   const retrieveDocuments = async (humanMessage: string) => {
-    const url = "http://localhost:3001/chatbot";
+    const url = "https://chatbot-langchain-backend.onrender.com/chatbot";
 
     const requestOptions = {
       method: "POST",
@@ -88,7 +88,9 @@ export async function customerAssistantResponse(humanMessage: string) {
     };
 
     const serverResponse = await fetch(url, requestOptions);
-    const retrieverDocuments = await serverResponse.json();
+    const serverResponseText = await serverResponse.text();
+    console.log(serverResponseText); // Imprimir la respuesta del servidor
+    const retrieverDocuments = JSON.parse(serverResponseText);
 
     const retriever = retrieverDocuments;
 
@@ -128,9 +130,5 @@ export async function customerAssistantResponse(humanMessage: string) {
 
   const response = result1;
 
-  console.log(response);
-
-  const mensaje = "mientras";
-
-  return mensaje;
+  return response;
 }
