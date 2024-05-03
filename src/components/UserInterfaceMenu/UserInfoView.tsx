@@ -4,8 +4,6 @@ export async function ShowUserInfo() {
   const userInfo = await getUserInfo();
   const user = userInfo.users[0];
 
-  console.log(user);
-
   return (
     <div>
       <section className="w-full h-auto flex flex-col gap-3 px-3">

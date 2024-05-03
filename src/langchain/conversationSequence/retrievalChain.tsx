@@ -89,7 +89,6 @@ export async function customerAssistantResponse(humanMessage: string) {
 
     const serverResponse = await fetch(url, requestOptions);
     const serverResponseText = await serverResponse.text();
-    console.log(serverResponseText); // Imprimir la respuesta del servidor
     const retrieverDocuments = JSON.parse(serverResponseText);
 
     const retriever = retrieverDocuments;
@@ -125,8 +124,6 @@ export async function customerAssistantResponse(humanMessage: string) {
     question: humanMessage,
     chat_history: [],
   });
-
-  console.log(result1);
 
   const response = result1;
 
