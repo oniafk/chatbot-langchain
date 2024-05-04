@@ -1,8 +1,11 @@
-import { getUserInfo } from "../../app/dataBaseRequests/userInfo";
+import { userInfo } from "../../interfaces/userInfoInterfaces";
 
-export async function ShowUserInfo() {
-  const userInfo = await getUserInfo();
-  const user = userInfo.users[0];
+interface userInfoProps {
+  user: userInfo[];
+}
+
+export const ShowUserInfo: React.FC<userInfoProps> = ({ user }) => {
+  console.log(user, "user");
 
   return (
     <div>
@@ -17,7 +20,7 @@ export async function ShowUserInfo() {
                 First Name
               </h4>
               <p className="w-full border border-slate-300  px-2 py-1 rounded-md ">
-                {user.user_first_name}
+                {user[0].user_first_name}
               </p>
             </div>
             <div className=" w-40">
@@ -25,7 +28,7 @@ export async function ShowUserInfo() {
                 Last Name
               </h4>
               <p className="w-full border border-slate-300  px-2 py-1 rounded-md ">
-                {user.user_last_name}
+                {user[0].user_last_name}
               </p>
             </div>
           </div>
@@ -34,11 +37,11 @@ export async function ShowUserInfo() {
               Email
             </h4>
             <p className="w-full border border-slate-300  px-2 py-1 rounded-md ">
-              {user.user_email}
+              {user[0].user_email}
             </p>
           </div>
         </div>
       </section>
     </div>
   );
-}
+};
