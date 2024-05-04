@@ -1,4 +1,3 @@
-import { getPaymentMethods } from "../../app/dataBaseRequests/paymentMethodInfo";
 import {
   Table,
   TableBody,
@@ -9,20 +8,17 @@ import {
   TableRow,
   PasswordCell,
 } from "@/components/ui/table";
-
 import { cn } from "../../lib/utils";
 import React from "react";
+import { paymentMethod } from "../../interfaces/userInfoInterfaces";
 
-interface paymentMethod {
-  paymet_method_number: number;
-  payment_method_type: string;
-  payment_method_expiration_date: string;
+interface paymentMethodsProps {
+  payments: paymentMethod[];
 }
 
-export async function PaymentMethodsView() {
-  const paymenthInfo = await getPaymentMethods();
-  const paymentMethods: paymentMethod[] = paymenthInfo.paymentMethods;
-
+export const PaymentMethodsView: React.FC<paymentMethodsProps> = ({
+  payments,
+}) => {
   return (
     <section className="w-full">
       <Table className="w-full">
@@ -38,7 +34,7 @@ export async function PaymentMethodsView() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paymentMethods.map((paymentMethod) => (
+          {payments.map((paymentMethod) => (
             <TableRow key={paymentMethod.paymet_method_number}>
               <TableCell className="font-medium">
                 {"***" +
@@ -61,4 +57,4 @@ export async function PaymentMethodsView() {
       </Table>
     </section>
   );
-}
+};
