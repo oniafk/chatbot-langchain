@@ -1,74 +1,57 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { EntityMemory } from "langchain/memory";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { ConversationChain } from "langchain/chains";
 import {
   RunnableSequence,
   RunnablePassthrough,
 } from "@langchain/core/runnables";
-import { formatDocumentsAsString } from "langchain/util/document";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import { format } from "path";
 
 const llm = new ChatOpenAI({
   modelName: "gpt-3.5-turbo",
 });
 
-const memory = new EntityMemory({
-  llm: new ChatOpenAI({
-    modelName: "gpt-3.5-turbo",
-  }),
-  chatHistoryKey: "history",
-  entitiesKey: "entities",
-});
-
-const customerAssistancePrompt = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
-
-Chat History:
-{chat_history}
-Follow Up Input: {question}
-Standalone question:`;
-
-const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
-  customerAssistancePrompt
-);
-
 const answerTemplate = `
-You are a customer service representative for a e comerce company.
-Answer the question based only on the following context:
+You are a customer service representative for a e-comerce company.
+you are designed for giving a solution to our customers providing the best possible service. the first approach will be ask for customers name, issue that they are facing, and order number, 
+on our policies that will be provided on the context next to this, you will find the best way to help the customer and possible solutions aviable. 
+You also will have personal information that is just for verification purposes, this is ahead in the context.
+if you dont have a solution aviable, ask them to send an email to
+customerService@email.com
+
+please, always answer in the same language that the customer talks to you
+
+Example1:
+
+Client: Hello, I have a problem with my package, it didnt arrive yet.
+Assistant: Hello, I'm sorry to hear that, could you provide me with your order Number and can you tell me your name?
+client: sure, My name is Manuel and the order number is 1
+Assistant: thank you, According with the information on the system, Manuel, it looks like your order has been delivered, Manuel, could you please check with your neighbors or family members if they received it?
+client: I will do that, thank you.
+
+Example2:
+
+client: Hello, I have a problem with my package, it didnt arrive yet.
+Assistant: Hello, I'm sorry to hear that, please, can you tell me your name and could you provide me with your order Number?
+client: My name is Daniel and the order number is 4
+Assistant: thank you Daniel, According with our informations, I just can say that the package has been lost in transit, I know that this is frustrating for you Daniel... we can offer you to replace the order or a refund, what would you prefer?
+Client: I would like a refund, please.
+Assistant: I will process that for you, Daniel , you will receive an email with the confirmation. Let me tell you that the money will show up in your account in 3-5 business days. Do you need anything else Daniel?
+Client: Thank you. thants it.
+
+chat History:
+{chat_history}
+
+context that has customer information and policies:
 {context}
-
-the answer will be based on 4 steps:
-
-1. check the documents related to the conversation scenarios for examples given to reply the customer,
-    this is a example of the conversation that you will have and it will be used as guide for replying the customer message.
-
-    2. check the documents for Customer service policies, this documents provide the rules that you need to follow when replying the customer message.
-    it will contain the rules of the company and posibles solutions for customer issues.
-
-    3. check the documents for Customer service behavior, this documents provide a guide for the best way to reply the customer message.
-    it will contain the best way to reply the customer message and also it will show the way that you will behave to face the different scenarios that you will have on
-    each interaction with the customers.
-
-    4. check the documents for the NOs scenarios, this documents provide the scenarios that you need to avoid when replying the customer message.
-    this documents will show the things that you must avoid at the momment of replying the customer message.
-
-    always remember that this documents are a guide for you to give the best answer to the customer, if you dont have the information that you need to reply the customer message
-    refeer the customer to get in contact with us to the email: contactus@email.com
-
-    the name of the customer is "Manuel" and also, you can check the history of his orders attched to the context
-     
-Question: {question}
 
 your answer:
 `;
 const ANSWER_PROMPT = PromptTemplate.fromTemplate(answerTemplate);
 
-const formatChatHistory = (chatHistory: [string, string][]) => {
-  const formattedDialogueTurns = chatHistory.map(
-    (dialogueTurn) => `Human: ${dialogueTurn[0]}\nAssistant: ${dialogueTurn[1]}`
-  );
-  return formattedDialogueTurns.join("\n");
-};
+let currentHistoryChat: [string, string][] = [
+  ["", "Hello, I'm here to help you with your order."],
+];
 
 type ConversationalRetrievalQAChainInput = {
   question: string;
@@ -76,54 +59,67 @@ type ConversationalRetrievalQAChainInput = {
 };
 
 export async function customerAssistantResponse(humanMessage: string) {
-  const retrieveDocuments = async (humanMessage: string) => {
-    const url = "https://chatbot-langchain-backend.onrender.com/chatbot";
+  const formatChatHistory = (chat: [string, string][]) => {
+    const formattedDialogueTurns = chat.map(
+      (dialogueTurn) =>
+        `Human: ${dialogueTurn[0]}\nAssistant: ${dialogueTurn[1]}`
+    );
+    return formattedDialogueTurns.join("\n");
+  };
 
-    const requestOptions = {
+  const retrieverDocuments = async (humanMessage: string) => {
+    const urlDocuments = "http://localhost:3001/chatbot";
+    const requestOptionsDocuments = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ humanMessage }),
+      body: JSON.stringify({
+        humanMessage,
+        chatHistory: formatChatHistory(currentHistoryChat),
+      }),
     };
 
-    const serverResponse = await fetch(url, requestOptions);
+    const userUrl = "http://localhost:3001/all-order-info";
+    const requestOptionsUserInfo = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const serverResponseUserInfo = await fetch(userUrl, requestOptionsUserInfo);
+    const serverResponseTextUserInfo = await serverResponseUserInfo.text();
+    const userInfo = JSON.stringify(serverResponseTextUserInfo);
+
+    const serverResponse = await fetch(urlDocuments, requestOptionsDocuments);
     const serverResponseText = await serverResponse.text();
     const retrieverDocuments = JSON.parse(serverResponseText);
 
-    const retriever = retrieverDocuments;
+    const retriever = `context:${retrieverDocuments}  /n User Information from DataBase:${userInfo}`;
 
     return retriever;
   };
 
-  const standaloneQuestionChain = RunnableSequence.from([
+  const answerChain = RunnableSequence.from([
     {
       question: (input: ConversationalRetrievalQAChainInput) => input.question,
       chat_history: (input: ConversationalRetrievalQAChainInput) =>
         formatChatHistory(input.chat_history),
     },
-    CONDENSE_QUESTION_PROMPT,
-    llm,
-    new StringOutputParser(),
-  ]);
-
-  const answerChain = RunnableSequence.from([
-    {
-      context: retrieveDocuments,
-      question: new RunnablePassthrough(),
-    },
+    (prevResult) => console.log(prevResult, "prevResult"),
     ANSWER_PROMPT,
     llm,
     new StringOutputParser(),
   ]);
 
-  const conversationalRetrievalQAChain =
-    standaloneQuestionChain.pipe(answerChain);
-
-  const result1 = await conversationalRetrievalQAChain.invoke({
+  const result1 = await answerChain.invoke({
     question: humanMessage,
-    chat_history: [],
+    chat_history: currentHistoryChat,
   });
+
+  console.log(result1, "result1");
+
+  currentHistoryChat.push([humanMessage, result1]);
 
   const response = result1;
 
