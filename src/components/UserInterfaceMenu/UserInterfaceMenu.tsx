@@ -22,12 +22,14 @@ const UserInterfaceMenu = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const responseOrders = await fetch(
-        "http://localhost:3001/all-order-info"
+        "https://chatbot-langchain-backend.onrender.com/all-order-info"
       );
       const responsePayments = await fetch(
-        "http://localhost:3001/payment-methods"
+        "https://chatbot-langchain-backend.onrender.com/payment-methods"
       );
-      const responseUser = await fetch("http://localhost:3001/users");
+      const responseUser = await fetch(
+        "https://chatbot-langchain-backend.onrender.com/users"
+      );
 
       const dataOrders = await responseOrders.json();
       const dataPayments = await responsePayments.json();

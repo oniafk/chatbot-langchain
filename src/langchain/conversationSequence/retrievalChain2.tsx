@@ -88,7 +88,8 @@ export async function customerAssistantResponse(humanMessage: string) {
   };
 
   const retrieveDocuments = async (humanMessage: string) => {
-    const urlDocuments = "http://localhost:3001/chatbot";
+    const urlDocuments =
+      "https://chatbot-langchain-backend.onrender.com/chatbot/getRelevantDocuments";
     const requestOptionsDocuments = {
       method: "POST",
       headers: {
@@ -100,7 +101,8 @@ export async function customerAssistantResponse(humanMessage: string) {
       }),
     };
 
-    const userUrl = "http://localhost:3001/all-order-info";
+    const userUrl =
+      "https://chatbot-langchain-backend.onrender.com/all-order-info";
     const requestOptionsUserInfo = {
       method: "GET",
       headers: {
