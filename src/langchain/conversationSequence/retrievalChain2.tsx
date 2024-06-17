@@ -132,6 +132,8 @@ export async function customerAssistantResponse(humanMessage: string) {
 
   const chatChain = await loadChatChain(llm, verbose);
 
+  console.log(formatedChat, "formatedChat");
+  console.log(contextAnswer, "context");
   if (contextAnswer && formatedChat) {
     answer = await chatChain.invoke({
       chat_history: formatedChat,
