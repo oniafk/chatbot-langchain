@@ -95,7 +95,7 @@ const UserInterfaceMenu = () => {
           <Separator className="bg-slate-900" />
           <div className="mt-2 h-5/6">
             <section className="flex flex-row h-full items-center space-x-1 text-sm">
-              <aside className="flex flex-col text-gray-900 text-sm gap-3 h-full w-auto p-1 font-medium pt-10">
+              <aside className="flex flex-col text-gray-900 text-sm gap-3 h-full w-auto p-1 font-medium pt-2">
                 <a
                   href="#"
                   className="hover:bg-gray-300 rounded-md  w-full h-auto py-2 px-3"
