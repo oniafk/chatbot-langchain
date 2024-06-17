@@ -31,6 +31,10 @@ const UserInterfaceMenu = () => {
         "https://chatbot-langchain-backend.onrender.com/users"
       );
 
+      if (!responseOrders.ok || !responsePayments.ok || !responseUser.ok) {
+        throw new Error("Failed to fetch");
+      }
+
       const dataOrders = await responseOrders.json();
       const dataPayments = await responsePayments.json();
       const dataUser = await responseUser.json();
