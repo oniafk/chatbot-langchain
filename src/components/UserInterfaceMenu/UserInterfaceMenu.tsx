@@ -77,7 +77,7 @@ const UserInterfaceMenu = () => {
               chatbot solution. Designed to provide personalized and efficient
               support, this platform combines advanced natural language
               processing capabilities with a comprehensive knowledge base of
-              your company's policies and procedures.
+              your company&apos;s policies and procedures.
               <br />
               The intuitive interface features a customer information menu,
               allowing users to easily access and review their order details. At
