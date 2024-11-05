@@ -8,7 +8,7 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { format } from "path";
 
 const llm = new ChatOpenAI({
-  modelName: "gpt-3.5-turbo",
+  modelName: "gpt-4o",
 });
 
 const answerTemplate = `
